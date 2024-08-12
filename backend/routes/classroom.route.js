@@ -23,7 +23,7 @@ router.get(
   authorizeRole(["PRINCIPAL", "TEACHER", "STUDENT"]),
   getClassroomById
 );
-router.put("/:id", authorizeRole(["PRINCIPAL"]), updateClassroom);
+router.patch("/:id", authorizeRole(["PRINCIPAL"]), updateClassroom);
 router.delete("/:id", authorizeRole(["PRINCIPAL"]), deleteClassroom);
 
 export default router;

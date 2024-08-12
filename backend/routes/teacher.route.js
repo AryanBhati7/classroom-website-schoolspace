@@ -15,7 +15,7 @@ router.use(verifyJWT, authorizeRole(["PRINCIPAL"]));
 router.get("/", getTeachers);
 router.get("/:id", getTeacherById);
 router.post("/", createTeacher);
-router.put("/:id", updateTeacher);
+router.patch("/:id", updateTeacher);
 router.delete("/:id", deleteTeacher);
 
 export default router;

@@ -29,12 +29,13 @@ app.use((req, res, next) => {
 import authRoutes from "./routes/auth.route.js";
 import classroomRoutes from "./routes/classroom.route.js";
 import teacherRoutes from "./routes/teacher.route.js";
-
+import studentRoutes from "./routes/student.route.js";
 //routes declaration
 // http://localhost:8000/api
 
 app.use("/api/auth", authRoutes);
 app.use("/api/classroom", classroomRoutes);
 app.use("/api/teacher", teacherRoutes);
+app.use("/api/student", studentRoutes);
 
 export { app };

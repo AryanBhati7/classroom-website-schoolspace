@@ -22,22 +22,6 @@ const userSchema = new mongoose.Schema(
       enum: ["PRINCIPAL", "TEACHER", "STUDENT"],
       required: true,
     },
-    // Teacher-specific fields
-    classroom: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Classroom",
-      required: function () {
-        return this.role === "Teacher";
-      },
-    },
-    // Student-specific fields
-    classroom: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Classroom",
-      required: function () {
-        return this.role === "Student";
-      },
-    },
   },
   { timestamps: true }
 );

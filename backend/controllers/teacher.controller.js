@@ -114,11 +114,41 @@ const deleteTeacher = asyncHandler(async (req, res) => {
 });
 
 const getTeachers = asyncHandler(async (req, res) => {
-  const teachers = await User.find({ role: "TEACHER" });
+  const teachers = await User.aggregate([
+    { $match: { role: "TEACHER" } }, // Match only teachers
+    {
+      $lookup: {
+        from: "classrooms", // Collection to join with
+        localField: "_id", // Field from the input documents (teacher _id)
+        foreignField: "teacher", // Field from the classrooms collection
+        as: "classroom", // Output array field
+      },
+    },
+    {
+      $unwind: {
+        path: "$classroom",
+        preserveNullAndEmptyArrays: true, // Preserve teachers without classrooms
+      },
+    },
+    {
+      $project: {
+        name: 1,
+        email: 1,
+        role: 1,
+        classroom: "$classroom.name",
+      },
+    },
+  ]);
 
   return res
     .status(200)
-    .json(new ApiResponse(200, teachers, "All teachers fetched Successfully"));
+    .json(
+      new ApiResponse(
+        200,
+        teachers,
+        "All teachers' classrooms fetched successfully"
+      )
+    );
 });
 
 export {

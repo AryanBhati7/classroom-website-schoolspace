@@ -7,7 +7,7 @@ const app = express();
 app.use(
   cors({
     origin:
-      process.env.MODE === "development"
+      process.env.MODE === "dev"
         ? process.env.CORS_ORIGIN_DEV
         : process.env.CORS_ORIGIN_PRODUCTION,
     credentials: true,
@@ -24,7 +24,13 @@ app.use((req, res, next) => {
   next();
 });
 
+//router imports
+
+import authRoutes from "./routes/auth.route.js";
+
 //routes declaration
-// http://localhost:8000/api/v1/
+// http://localhost:8000/api
+
+app.use("/api/auth", authRoutes);
 
 export { app };

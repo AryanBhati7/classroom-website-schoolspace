@@ -29,7 +29,7 @@ export const addTeacher = async (teacher) => {
 
 export const updateTeacher = async (teacher) => {
   try {
-    const { data } = await API.put(`/teacher/${teacher._id}`, teacher);
+    const { data } = await API.patch(`/teacher/${teacher._id}`, teacher);
     toast.success(data?.message);
   } catch (error) {
     toast.error(error?.response?.data?.error);

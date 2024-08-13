@@ -24,13 +24,12 @@ function AddTeacher({ onClose }) {
     resolver: zodResolver(schema),
   });
 
-  const { mutateAsync: addTeacher, isPending } = useAddTeacher();
+  const { mutateAsync: addTeacherApiCall, isPending } = useAddTeacher();
   const onSubmit = async (data) => {
     console.log(data);
-    // const res = await addTeacher(data);
+    const res = await addTeacherApiCall(data);
     if (res) {
-      //TODO: Add teacher to the database
-      // dispatch(addTeacher({ _id: res._id, name: res.name }));
+      dispatch(addTeacher({ _id: res._id, name: res.name }));
       onClose();
     }
   };

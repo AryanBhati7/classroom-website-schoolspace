@@ -93,9 +93,7 @@ function Classrooms() {
                     {classroom.name}
                   </td>
                   <td className="px-6 py-4 text-lg text-gray-900">
-                    {classroom.teacher
-                      ? classroom.teacher?.name
-                      : "Not Assigned"}
+                    {classroom.teacher ? classroom.teacher?.name : "N/A"}
                   </td>
                   <td className="px-6 py-4">
                     {classroom.schedule && classroom.schedule.length > 0 ? (

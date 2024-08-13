@@ -12,8 +12,8 @@ function DeleteTeacher({ onClose, teacher }) {
     const res = await deleteTeacher(teacher._id);
     if (res) {
       dispatch(deleteTeacher(teacher._id));
-      onClose();
     }
+    onClose();
   };
 
   if (isPending) {

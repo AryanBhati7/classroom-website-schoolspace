@@ -10,7 +10,6 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 
 function Teachers() {
   const { data: teachers, isPending } = useTeachers();
-
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -75,7 +74,7 @@ function Teachers() {
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-lg text-gray-900">
             {teachers.length === 0 ? (
               <tr className="bg-white border-b">
                 <td colSpan="5" className="px-6 py-4 text-center">
@@ -91,7 +90,7 @@ function Teachers() {
                   </td>
                   <td className="px-6 py-4">{item.email}</td>
                   <td className="px-6 py-4">
-                    {item.classroom ? item.classroom : "Not Assigned"}
+                    {item.classroom ? item.classroom?.name : "N/A"}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex justify-center items-center gap-2">

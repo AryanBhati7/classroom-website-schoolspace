@@ -134,7 +134,6 @@ const deleteClassroom = asyncHandler(async (req, res) => {
   }
 
   const classroom = await Classroom.findById(classRoomId);
-  console.log(classroom);
 
   if (!classroom) {
     throw new ApiError(404, "Classroom not found");

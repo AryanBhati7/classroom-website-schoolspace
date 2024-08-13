@@ -22,9 +22,9 @@ const generateAccessAndRefreshTokens = async (userId, role) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, organization } = req.body;
 
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !organization) {
     throw new ApiError(400, "Please provide all the required fields");
   }
 
@@ -39,6 +39,7 @@ const registerUser = asyncHandler(async (req, res) => {
     email,
     password,
     role: "PRINCIPAL",
+    organization,
   });
 
   return res

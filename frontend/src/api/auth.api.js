@@ -62,9 +62,10 @@ export const logout = async () => {
 export const getCurrentUser = async () => {
   try {
     const { data } = await API.get("/auth/current-user");
-    return data?.data?.user;
+    console.log(data);
+    return data?.data;
   } catch (error) {
-    throw error?.response?.data?.error;
+    return error?.response?.data;
   }
 };
 

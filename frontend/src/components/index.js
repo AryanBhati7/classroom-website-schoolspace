@@ -6,6 +6,9 @@ import Sidebar from "./Sidebar";
 import AuthLayout from "./AuthLayout";
 import PrincipalDashboard from "./Principal/PrincipalDashboard";
 import OrganizationStats from "./OrganizationStats";
+import EditTeacher from "./Modals/Teacher/EditTeacher";
+import DeleteTeacher from "./Modals/Teacher/DeleteTeacher";
+import AddTeacher from "./Modals/Teacher/AddTeacher";
 
 export {
   LandingPage,
@@ -16,4 +19,7 @@ export {
   AuthLayout,
   PrincipalDashboard,
   OrganizationStats,
+  EditTeacher,
+  DeleteTeacher,
+  AddTeacher,
 };

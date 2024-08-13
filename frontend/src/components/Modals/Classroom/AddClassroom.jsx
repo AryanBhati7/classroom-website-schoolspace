@@ -4,6 +4,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAddTeacher } from "../../../hooks/teacher.hook.js";
 import { LoadingSpinner } from "../../index.js";
+import { useDispatch, useSelector } from "react-redux";
+import { addClassroom } from "../../../features/dataSlice.js";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -16,10 +18,11 @@ const schema = z.object({
       })
     )
     .min(1, "At least one schedule is required"),
-  classroom: z.string().min(1, "Classroom is required"),
+  teacher: z.string().min(1, "Teacher is required"),
 });
 
 function AddClassroom({ onClose }) {
+  const dispatch = useDispatch();
   const {
     register,
     control,
@@ -30,7 +33,7 @@ function AddClassroom({ onClose }) {
     defaultValues: {
       name: "",
       schedule: [{ days: "", startTime: "", endTime: "" }],
-      classroom: "",
+      teacher: "",
     },
   });
 
@@ -42,11 +45,15 @@ function AddClassroom({ onClose }) {
   const { mutateAsync: addTeacher, isPending } = useAddTeacher();
 
   const onSubmit = async (data) => {
+    console.log(data);
     const res = await addTeacher(data);
     if (res) {
+      // dispatch(addClassroom({ _id: res._id, name: res.name }));
       onClose();
     }
   };
+
+  const teachers = useSelector((state) => state.data.teachers);
 
   if (isPending) {
     return <LoadingSpinner />;
@@ -55,7 +62,7 @@ function AddClassroom({ onClose }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg shadow-lg w-1/3 p-6">
-        <h2 className="text-2xl font-bold mb-4 text-blue-500">Add Teacher</h2>
+        <h2 className="text-2xl font-bold mb-4 text-blue-500">Add Classroom</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label
@@ -129,19 +136,19 @@ function AddClassroom({ onClose }) {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="classroom"
             >
-              Assigned Classroom
+              Assign Teacher
             </label>
             <select
-              id="classroom"
-              {...register("classroom")}
+              id="teacher"
+              {...register("teacher")}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             >
-              <option value="">Select a classroom</option>
-              {/* {classrooms.map((classroom) => (
-                <option key={classroom._id} value={classroom._id}>
-                  {classroom.name}
+              <option value="">Select a Teacher</option>
+              {teachers.map((teacher) => (
+                <option key={teacher._id} value={teacher._id}>
+                  {teacher.name}
                 </option>
-              ))} */}
+              ))}
             </select>
             {errors.classroom && (
               <p className="text-red-500 text-xs italic mt-2">

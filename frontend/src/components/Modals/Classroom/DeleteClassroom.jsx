@@ -1,13 +1,17 @@
 import React from "react";
 import LoadingSpinner from "../../LoadingSpinner";
 import { useDeleteClassroom } from "../../../hooks/classroom.hook";
+import { deleteClassroom } from "../../../features/dataSlice";
+import { useDispatch } from "react-redux";
 
 function DeleteClassroom({ onClose, classroom }) {
+  const dispatch = useDispatch();
   const { mutateAsync: deleteClassroom, isPending } = useDeleteClassroom();
 
   const onDelete = async () => {
     const res = await deleteClassroom(classroom._id);
     if (res) {
+      dispatch(deleteClassroom(classroom._id));
       onClose();
     }
   };

@@ -2,6 +2,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useDispatch, useSelector } from "react-redux";
+import { updateTeacher } from "../../../features/dataSlice";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -10,6 +12,7 @@ const schema = z.object({
 });
 
 function EditTeacher({ teacher, onClose }) {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -18,15 +21,19 @@ function EditTeacher({ teacher, onClose }) {
     defaultValues: {
       name: teacher.name,
       email: teacher.email,
-      classroom: teacher.classroom,
+      classroom: teacher.classroom._id,
     },
     resolver: zodResolver(schema),
   });
 
   const onSubmit = (data) => {
     onSave({ ...teacher, ...data });
+    //TODO: Update teacher in the database
+    // dispatch(updateTeacher({ name: data.name, _id: data._id }));
     onClose();
   };
+
+  const classrooms = useSelector((state) => state.data.classrooms);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -78,17 +85,18 @@ function EditTeacher({ teacher, onClose }) {
             >
               Assigned Classroom
             </label>
-            <input
+            <select
               id="classroom"
-              type="text"
               {...register("classroom")}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-            {errors.classroom && (
-              <p className="text-red-500 text-xs italic">
-                {errors.classroom.message}
-              </p>
-            )}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500 hover:border-blue-500"
+            >
+              <option value="">Select a classroom</option>
+              {classrooms.map((classroom) => (
+                <option key={classroom._id} value={classroom._id}>
+                  {classroom.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex justify-end">
             <button

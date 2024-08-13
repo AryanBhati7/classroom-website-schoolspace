@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getPrincipalDashboard,
   getOrganizationStats,
+  getTeachersAndClassrooms,
 } from "../api/dashboard.api";
 
 export const usePrincipalDashboard = () => {
@@ -17,6 +18,15 @@ export const useOrganizationStats = () => {
   return useQuery({
     queryKey: ["organizationStats"],
     queryFn: () => getOrganizationStats(),
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+  });
+};
+
+export const useTeachersAndClassrooms = () => {
+  return useQuery({
+    queryKey: ["teachersAndClassrooms"],
+    queryFn: () => getTeachersAndClassrooms(),
     staleTime: 1000 * 60 * 5,
     retry: 1,
   });

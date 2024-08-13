@@ -12,11 +12,7 @@ import {
 function Home() {
   const authStatus = useSelector((state) => state.auth.status);
   const user = useSelector((state) => state.auth.user);
-  const organization = "Your Organization"; // Replace with actual organization data
-  const numberOfClassrooms = 10; // Replace with actual data
-  const numberOfTeachers = 5; // Replace with actual data
-  const numberOfStudents = 100; // Replace with actual data
-  console.log(authStatus);
+
   if (!authStatus) {
     return <LandingPage />;
   }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "./features/authSlice";
+import { setTeachers, setClassrooms } from "./features/dataSlice";
 import { useCurrentUser } from "./hooks/auth.hook";
 import {
   Home,
@@ -24,22 +25,39 @@ import {
   AuthLayout,
   Logo,
 } from "./components";
+import { useTeachersAndClassrooms } from "./hooks/dashboard.hook";
 
 function App() {
   const dispatch = useDispatch();
   const { data: res, isFetching, error, isFetched } = useCurrentUser();
   const location = useLocation();
-  console.log(res, "get current user app");
+  const [shouldFetch, setShouldFetch] = useState(false);
+
+  const { data: teachersAndClassrooms } = useTeachersAndClassrooms(shouldFetch);
+
   const hideSidebarPaths = ["/sign-in", "/sign-up", "/"];
   const shouldHideSidebar = hideSidebarPaths.includes(location.pathname);
 
   useEffect(() => {
     if (res && res.user) {
       dispatch(setUser(res.user));
+      setShouldFetch(true);
     } else {
       dispatch(setUser(null));
+      setShouldFetch(false);
     }
   }, [res, isFetching]);
+
+  useEffect(() => {
+    if (teachersAndClassrooms) {
+      if (teachersAndClassrooms.teachers) {
+        dispatch(setTeachers(teachersAndClassrooms.teachers));
+      }
+      if (teachersAndClassrooms.classrooms) {
+        dispatch(setClassrooms(teachersAndClassrooms.classrooms));
+      }
+    }
+  }, [teachersAndClassrooms]);
 
   if (isFetching) {
     return <LoadingSpinner />;

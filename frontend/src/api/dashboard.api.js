@@ -26,3 +26,13 @@ export const getOrganizationStats = async () => {
     throw error?.response?.data?.error;
   }
 };
+
+export const getTeachersAndClassrooms = async () => {
+  try {
+    const { data } = await API.get("/dashboard/classrooms-teachers");
+    return data?.data;
+  } catch (error) {
+    toast.error(error?.response?.data?.error);
+    throw error?.response?.data?.error;
+  }
+};

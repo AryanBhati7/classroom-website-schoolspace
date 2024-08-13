@@ -4,6 +4,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAddTeacher } from "../../../hooks/teacher.hook";
 import { LoadingSpinner } from "../../index.js";
+import { useDispatch, useSelector } from "react-redux";
+import { addTeacher } from "../../../features/dataSlice.js";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -13,6 +15,7 @@ const schema = z.object({
 });
 
 function AddTeacher({ onClose }) {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -23,11 +26,16 @@ function AddTeacher({ onClose }) {
 
   const { mutateAsync: addTeacher, isPending } = useAddTeacher();
   const onSubmit = async (data) => {
-    const res = await addTeacher(data);
+    console.log(data);
+    // const res = await addTeacher(data);
     if (res) {
+      //TODO: Add teacher to the database
+      // dispatch(addTeacher({ _id: res._id, name: res.name }));
       onClose();
     }
   };
+
+  const classrooms = useSelector((state) => state.data.classrooms);
 
   if (isPending) {
     return <LoadingSpinner />;
@@ -108,9 +116,11 @@ function AddTeacher({ onClose }) {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500 hover:border-blue-500"
             >
               <option value="">Select a classroom</option>
-              <option value="Classroom 1">Classroom 1</option>
-              <option value="Classroom 2">Classroom 2</option>
-              <option value="Classroom 3">Classroom 3</option>
+              {classrooms.map((classroom) => (
+                <option key={classroom._id} value={classroom._id}>
+                  {classroom.name}
+                </option>
+              ))}
             </select>
             {errors.classroom && (
               <p className="text-red-500 text-xs italic mt-2">

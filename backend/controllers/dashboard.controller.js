@@ -81,4 +81,23 @@ const getOrganizationStats = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, response, "Organization Stats"));
 });
 
-export { generatePrincipalDashboard, getOrganizationStats };
+const getClassroomsAndTeachers = asyncHandler(async (req, res) => {
+  const classrooms = await Classroom.find({}, "_id name");
+  const teachers = await User.find({ role: "TEACHER" }, "_id name");
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { classrooms, teachers },
+        "Classrooms and Teachers fetched successfully"
+      )
+    );
+});
+
+export {
+  generatePrincipalDashboard,
+  getOrganizationStats,
+  getClassroomsAndTeachers,
+};

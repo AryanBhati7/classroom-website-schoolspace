@@ -73,7 +73,7 @@ const getAllClassrooms = asyncHandler(async (req, res) => {
 
 const updateClassroom = asyncHandler(async (req, res) => {
   const classRoomId = req.params.id;
-  const { name, teacherId, schedule } = req.body;
+  const { name, teacher, schedule } = req.body;
 
   if (!classRoomId) {
     throw new ApiError(400, "Please provide a classroom id");
@@ -88,12 +88,12 @@ const updateClassroom = asyncHandler(async (req, res) => {
     classroom.name = name;
   }
 
-  if (teacherId) {
-    const teacher = await User.findById(teacherId);
+  if (teacher) {
+    const teacher = await User.findById(teacher);
     if (!teacher) {
       throw new ApiError(404, "Teacher not found");
     }
-    classroom.teacher = teacherId;
+    classroom.teacher = teacher;
   }
 
   if (schedule) {

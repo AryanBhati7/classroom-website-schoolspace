@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useDispatch, useSelector } from "react-redux";
+import { updateClassroom } from "../../../features/dataSlice";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -18,6 +20,7 @@ const schema = z.object({
 });
 
 function EditClassroom({ classroom, onClose }) {
+  const dispatch = useDispatch();
   const {
     register,
     control,
@@ -29,7 +32,7 @@ function EditClassroom({ classroom, onClose }) {
       schedule: classroom.schedule || [
         { days: "", startTime: "", endTime: "" },
       ],
-      // teacher: classroom.teacher ? classroom.teacher._id : "",
+      teacher: classroom.teacher ? classroom.teacher._id : "",
     },
     resolver: zodResolver(schema),
   });
@@ -41,8 +44,14 @@ function EditClassroom({ classroom, onClose }) {
 
   const onSubmit = (data) => {
     console.log({ ...classroom, ...data });
+
+    if (res) {
+      // dispatch(updateClassroom({ res._id, res._name }));
+    }
     onClose();
   };
+
+  const teachers = useSelector((state) => state.data.teachers);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -127,15 +136,15 @@ function EditClassroom({ classroom, onClose }) {
             </label>
             <select
               id="teacher"
-              // {...register("teacher")}
+              {...register("teacher")}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             >
               <option value="">Select a Teacher</option>
-              {/* {teachers.map((teacher) => (
+              {teachers.map((teacher) => (
                 <option key={teacher._id} value={teacher._id}>
-                  {teacher.email}
+                  {teacher.name}
                 </option>
-              ))} */}
+              ))}
             </select>
             {errors.teacher && (
               <p className="text-red-500 text-xs italic">

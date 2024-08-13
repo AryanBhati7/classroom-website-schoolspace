@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   generatePrincipalDashboard,
+  getClassroomsAndTeachers,
   getOrganizationStats,
 } from "../controllers/dashboard.controller.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
@@ -16,5 +17,11 @@ router.get(
 );
 
 router.get("/organization-stats", getOrganizationStats);
+
+router.get(
+  "/classrooms-teachers",
+  authorizeRole(["PRINCIPAL"]),
+  getClassroomsAndTeachers
+);
 
 export default router;

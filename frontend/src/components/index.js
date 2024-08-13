@@ -6,9 +6,17 @@ import Sidebar from "./Sidebar";
 import AuthLayout from "./AuthLayout";
 import PrincipalDashboard from "./Principal/PrincipalDashboard";
 import OrganizationStats from "./OrganizationStats";
+
+//Modals
+//Teacher
 import EditTeacher from "./Modals/Teacher/EditTeacher";
 import DeleteTeacher from "./Modals/Teacher/DeleteTeacher";
 import AddTeacher from "./Modals/Teacher/AddTeacher";
+
+//Classroom
+import EditClassroom from "./Modals/Classroom/EditClassroom";
+import DeleteClassroom from "./Modals/Classroom/DeleteClassroom";
+import AddClassroom from "./Modals/Classroom/AddClassroom";
 
 export {
   LandingPage,
@@ -22,4 +30,7 @@ export {
   EditTeacher,
   DeleteTeacher,
   AddTeacher,
+  EditClassroom,
+  DeleteClassroom,
+  AddClassroom,
 };

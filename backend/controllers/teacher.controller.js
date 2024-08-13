@@ -29,11 +29,14 @@ const createTeacher = asyncHandler(async (req, res) => {
     email,
     password,
     role: "TEACHER",
+    organization: req.user.organization,
   });
+
+  const createdTeacher = await User.findById(teacher._id).select("-password");
 
   return res
     .status(201)
-    .json(new ApiResponse(200, teacher, "Teacher created successfully"));
+    .json(new ApiResponse(200, createdTeacher, "Teacher created successfully"));
 });
 
 const getTeacherById = asyncHandler(async (req, res) => {

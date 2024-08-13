@@ -1,7 +1,7 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 import { BASE_URL } from "../constants.js";
-console.log(BASE_URL);
+
 const API = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,

@@ -39,6 +39,7 @@ const createStudent = asyncHandler(async (req, res) => {
     email,
     password,
     role: "STUDENT",
+    organization: req.user.organization,
   });
 
   await student.save();

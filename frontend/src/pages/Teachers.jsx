@@ -41,43 +41,10 @@ function Teachers() {
     return <LoadingSpinner />;
   }
 
-  if (teachers.length === 0) {
-    return (
-      <div className="flex-1 p-8 bg-white shadow-lg rounded-lg m-3 flex flex-col h-[96%]">
-        <div className="relative overflow-x-auto rounded-lg shadow-lg">
-          <table className="w-full text-sm text-center text-gray-500">
-            <thead className="text-md uppercase bg-blue-500 text-white">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  #
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Teacher Name
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Email
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Assigned Class
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="bg-white border-b">
-                <td colSpan="4" className="px-6 py-4 text-center">
-                  No teachers found
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
-  }
   return (
     <div className="flex-1 p-8 bg-white shadow-lg rounded-lg m-3 flex flex-col h-[96%]">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">TEACHERS</h1>
+        <h1 className="text-3xl font-bold">TEACHERS</h1>
         <button
           onClick={() => setIsAddModalOpen(true)}
           className="bg-blue-500 text-white px-4 py-2 rounded flex items-center"

@@ -6,10 +6,9 @@ const API = axios.create({
   withCredentials: true,
 });
 
-export const getAllTeachers = async () => {
+export const getAllClassrooms = async () => {
   try {
-    const { data } = await API.get("/teacher");
-    console.log(data);
+    const { data } = await API.get("/classroom");
     return data?.data;
   } catch (error) {
     toast.error(error?.response?.data?.error);
@@ -17,9 +16,9 @@ export const getAllTeachers = async () => {
   }
 };
 
-export const addTeacher = async (teacher) => {
+export const addClassroom = async (classroom) => {
   try {
-    const { data } = await API.post("/teacher", teacher);
+    const { data } = await API.post("/classroom", classroom);
     toast.success(data?.message);
   } catch (error) {
     toast.error(error?.response?.data?.error);
@@ -27,9 +26,9 @@ export const addTeacher = async (teacher) => {
   }
 };
 
-export const updateTeacher = async (teacher) => {
+export const updateClassroom = async (classroom) => {
   try {
-    const { data } = await API.put(`/teacher/${teacher._id}`, teacher);
+    const { data } = await API.put(`/classroom/${classroom._id}`, classroom);
     toast.success(data?.message);
   } catch (error) {
     toast.error(error?.response?.data?.error);
@@ -37,9 +36,9 @@ export const updateTeacher = async (teacher) => {
   }
 };
 
-export const deleteTeacher = async (teacherId) => {
+export const deleteClassroom = async (classroomId) => {
   try {
-    const { data } = await API.delete(`/teacher/${teacherId}`);
+    const { data } = await API.delete(`/classroom/${classroomId}`);
     toast.success(data?.message);
   } catch (error) {
     toast.error(error?.response?.data?.error);

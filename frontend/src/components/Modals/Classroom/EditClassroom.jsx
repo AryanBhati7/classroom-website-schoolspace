@@ -4,6 +4,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
 import { updateClassroom } from "../../../features/dataSlice";
+import { useUpdateClassroom } from "../../../hooks/classroom.hook";
+import LoadingSpinner from "../../LoadingSpinner";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -42,16 +44,20 @@ function EditClassroom({ classroom, onClose }) {
     name: "schedule",
   });
 
-  const onSubmit = (data) => {
-    console.log({ ...classroom, ...data });
+  const { mutateAsync: updateClassroomApi, isPending } = useUpdateClassroom();
 
-    if (res) {
-      // dispatch(updateClassroom({ res._id, res._name }));
-    }
+  const onSubmit = async (data) => {
+    const res = await updateClassroomApi({ ...data, _id: classroom._id });
+
+    dispatch(updateClassroom({ _id: res._id, name: res._name }));
     onClose();
   };
 
   const teachers = useSelector((state) => state.data.teachers);
+
+  if (isPending) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

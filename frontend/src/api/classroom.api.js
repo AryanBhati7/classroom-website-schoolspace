@@ -27,8 +27,9 @@ export const addClassroom = async (classroom) => {
 };
 
 export const updateClassroom = async (classroom) => {
+  console.log(classroom, "update api classroom");
   try {
-    const { data } = await API.put(`/classroom/${classroom._id}`, classroom);
+    const { data } = await API.patch(`/classroom/${classroom._id}`, classroom);
     toast.success(data?.message);
   } catch (error) {
     toast.error(error?.response?.data?.error);

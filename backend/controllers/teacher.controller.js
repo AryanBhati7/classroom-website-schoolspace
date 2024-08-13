@@ -5,7 +5,7 @@ import { User } from "../models/user.model.js";
 import { Classroom } from "../models/classroom.model.js";
 
 const createTeacher = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, assignedClassroom } = req.body;
 
   if (!name) {
     throw new ApiError(400, "Please provide a name for the teacher");
@@ -17,6 +17,18 @@ const createTeacher = asyncHandler(async (req, res) => {
 
   if (!password) {
     throw new ApiError(400, "Please provide a password for the teacher");
+  }
+
+  if (!assignedClassroom) {
+    throw new ApiError(400, "Please assign a classroom to the teacher");
+  }
+
+  const teacherAlreadyAssigned = await Classroom.findOne({
+    teacher: assignedClassroom,
+  });
+
+  if (teacherAlreadyAssigned) {
+    throw new ApiError(400, "Teacher is already assigned to this classroom");
   }
 
   const teacherExists = await User.findOne({ email });
@@ -60,7 +72,7 @@ const updateTeacher = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
   if (!teacherId) {
-    throw new ApiError(400, "Please provide a teacher id");
+    throw new ApiError(400, "Please assign a Teacher");
   }
 
   const teacher = await User.findById(teacherId);

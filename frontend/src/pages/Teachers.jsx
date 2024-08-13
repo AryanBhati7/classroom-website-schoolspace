@@ -10,7 +10,6 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 
 function Teachers() {
   const { data: teachers, isPending } = useTeachers();
-  console.log(teachers);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);

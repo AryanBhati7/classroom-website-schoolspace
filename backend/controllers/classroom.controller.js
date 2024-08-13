@@ -5,14 +5,10 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 const createClassroom = asyncHandler(async (req, res) => {
-  const { name, teacherId, schedule } = req.body;
+  const { name, teacher, schedule } = req.body;
 
   if (!name) {
     throw new ApiError(400, "Please provide a name for the classroom");
-  }
-
-  if (!teacherId) {
-    throw new ApiError(400, "Please assign a teacher for the classroom");
   }
 
   if (!Array.isArray(schedule) || schedule.length === 0) {
@@ -24,21 +20,32 @@ const createClassroom = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Classroom already exists with this name");
   }
 
-  const teacher = await User.findById(teacherId);
-  if (!teacher) {
-    throw new ApiError(404, "Teacher not found");
+  if (teacher) {
+    const teacherExists = await User.findById(teacher);
+    if (!teacherExists) {
+      throw new ApiError(404, "Teacher not found");
+    }
+
+    const teacherAlreadyAssigned = await Classroom.findOne({
+      teacher: teacher,
+    });
+
+    if (teacherAlreadyAssigned) {
+      throw new ApiError(
+        400,
+        "This teacher is already assigned to a different classroom"
+      );
+    }
   }
 
   const classroom = await Classroom.create({
     name,
-    teacher: teacherId,
+    teacher: teacher || null,
     schedule,
     organization: req.user.organization,
   });
 
-  return res
-    .status(201)
-    .json(new ApiResponse(200, classroom, "Classroom created successfully"));
+  res.status(201).json(201, classroom, "Classroom created successfully");
 });
 
 const getClassroomById = asyncHandler(async (req, res) => {
@@ -93,6 +100,18 @@ const updateClassroom = asyncHandler(async (req, res) => {
     if (!teacher) {
       throw new ApiError(404, "Teacher not found");
     }
+
+    const teacherAlreadyAssigned = await Classroom.findOne({
+      teacher: teacher._id,
+    });
+
+    if (teacherAlreadyAssigned) {
+      throw new ApiError(
+        400,
+        "This teacher is already assigned to a different classroom"
+      );
+    }
+
     classroom.teacher = teacher;
   }
 

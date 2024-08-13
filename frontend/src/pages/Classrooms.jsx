@@ -11,7 +11,6 @@ import { useClassrooms } from "../hooks/classroom.hook.js";
 
 function Classrooms() {
   const { data: classrooms, isPending } = useClassrooms();
-  console.log(classrooms);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);

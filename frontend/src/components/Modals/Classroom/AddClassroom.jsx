@@ -2,10 +2,10 @@ import React from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAddTeacher } from "../../../hooks/teacher.hook.js";
 import { LoadingSpinner } from "../../index.js";
 import { useDispatch, useSelector } from "react-redux";
 import { addClassroom } from "../../../features/dataSlice.js";
+import { useAddClassroom } from "../../../hooks/classroom.hook.js";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -18,7 +18,7 @@ const schema = z.object({
       })
     )
     .min(1, "At least one schedule is required"),
-  teacher: z.string().min(1, "Teacher is required"),
+  teacher: z.string(),
 });
 
 function AddClassroom({ onClose }) {
@@ -42,13 +42,13 @@ function AddClassroom({ onClose }) {
     name: "schedule",
   });
 
-  const { mutateAsync: addTeacher, isPending } = useAddTeacher();
+  const { mutateAsync: createClassroom, isPending } = useAddClassroom();
 
   const onSubmit = async (data) => {
     console.log(data);
-    const res = await addTeacher(data);
+    const res = await createClassroom(data);
     if (res) {
-      // dispatch(addClassroom({ _id: res._id, name: res.name }));
+      dispatch(addClassroom({ _id: res._id, name: res.name }));
       onClose();
     }
   };
@@ -57,6 +57,10 @@ function AddClassroom({ onClose }) {
 
   if (isPending) {
     return <LoadingSpinner />;
+  }
+
+  if (errors) {
+    console.log(errors);
   }
 
   return (
@@ -91,12 +95,18 @@ function AddClassroom({ onClose }) {
             {fields.map((item, index) => (
               <div key={item.id} className="mb-2">
                 <div className="flex space-x-2">
-                  <input
-                    type="text"
-                    placeholder="Day"
+                  <select
                     {...register(`schedule.${index}.days`)}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  />
+                  >
+                    <option value="">Select a Day</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                  </select>
                   <input
                     type="time"
                     {...register(`schedule.${index}.startTime`)}

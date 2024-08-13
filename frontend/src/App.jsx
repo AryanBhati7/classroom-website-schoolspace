@@ -46,7 +46,7 @@ function App() {
       dispatch(setUser(null));
       setShouldFetch(false);
     }
-  }, [res, isFetching]);
+  }, [res]);
 
   useEffect(() => {
     if (teachersAndClassrooms) {

@@ -42,9 +42,20 @@ const registerUser = asyncHandler(async (req, res) => {
     organization,
   });
 
+  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
+    createdUser._id
+  );
+  const loggedInUser = await User.findById(createdUser._id).select(
+    "-password -refreshToken"
+  );
+  res.setHeader("Set-Cookie", [
+    `accessToken=${accessToken}; Max-Age=${1 * 24 * 60 * 60}; Path=/; HttpOnly; Secure; SameSite=None`,
+    `refreshToken=${refreshToken}; Max-Age=${15 * 24 * 60 * 60}; Path=/; HttpOnly; Secure; SameSite=None`,
+  ]);
+
   return res
     .status(201)
-    .json(new ApiResponse(200, createdUser, "User Registered Successfully"));
+    .json(new ApiResponse(200, loggedInUser, "User Registered Successfully"));
 });
 
 const loginUser = asyncHandler(async (req, res) => {

@@ -4,8 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Logo } from "../components/index.js";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLogin } from "../hooks/auth.hook.js";
+import { useDispatch } from "react-redux";
+import { setUser } from "../features/authSlice.js";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -13,6 +15,8 @@ const schema = z.object({
 });
 
 function SignIn() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -28,7 +32,8 @@ function SignIn() {
     const res = await loginUser(data);
 
     if (res) {
-      console.log("User logged in successfully");
+      dispatch(setUser(res));
+      navigate("/");
     }
   };
 

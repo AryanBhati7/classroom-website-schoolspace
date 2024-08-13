@@ -4,8 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Logo } from "../components/index.js";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useRegisterUser } from "../hooks/auth.hook.js";
-import { Link } from "react-router-dom";
+import { useLogin, useRegisterUser } from "../hooks/auth.hook.js";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../features/authSlice.js";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -15,6 +17,8 @@ const schema = z.object({
 });
 
 function SignUp() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -25,11 +29,15 @@ function SignUp() {
   });
 
   const { mutateAsync: registerUser, isPending } = useRegisterUser();
+
+  const { mutateAsync: loginUser } = useLogin();
   const onSubmit = async (data) => {
     const res = await registerUser(data);
+    console.log(res);
 
-    if (res.success) {
-      console.log("User registered successfully");
+    if (res) {
+      dispatch(setUser(res));
+      navigate("/");
     }
   };
 

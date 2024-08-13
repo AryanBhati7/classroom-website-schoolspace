@@ -8,12 +8,14 @@ import {
   FaHome,
   FaSignOutAlt,
 } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLogout } from "../hooks/auth.hook";
+import { setUser } from "../features/authSlice.js";
 
 function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [activePath, setActivePath] = useState(location.pathname);
 
@@ -35,6 +37,7 @@ function Sidebar() {
     const res = await logout();
     if (res) {
       navigate("/");
+      dispatch(setUser(null));
     }
   };
 

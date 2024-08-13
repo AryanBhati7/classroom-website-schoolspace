@@ -1,12 +1,27 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useLogin } from "../hooks/auth.hook";
+import LoadingSpinner from "./LoadingSpinner";
 
 function LandingPage() {
-  const handleDemoTour = () => {
-    alert(
-      "This is a demo tour of SchoolSpace. You can sign up to create your own account and explore the features of SchoolSpace."
-    );
+  const { mutateAsync: loginUser, isPending } = useLogin();
+
+  const data = {
+    email: "principal@classroom.com",
+    password: "Admin",
   };
+  const handleDemoTour = async () => {
+    const res = await loginUser(data);
+
+    if (res) {
+      dispatch(setUser(res));
+      navigate("/");
+    }
+  };
+
+  if (isPending) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="h-screen w-full flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-500">

@@ -5,6 +5,7 @@ import UserCard from "./UserCard";
 import Sidebar from "./Sidebar";
 import AuthLayout from "./AuthLayout";
 import PrincipalDashboard from "./Principal/PrincipalDashboard";
+import OrganizationStats from "./OrganizationStats";
 
 export {
   LandingPage,
@@ -14,4 +15,5 @@ export {
   Sidebar,
   AuthLayout,
   PrincipalDashboard,
+  OrganizationStats,
 };

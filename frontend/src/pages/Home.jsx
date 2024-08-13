@@ -6,6 +6,7 @@ import {
   UserCard,
   Sidebar,
   PrincipalDashboard,
+  OrganizationStats,
 } from "../components";
 
 function Home() {
@@ -28,25 +29,7 @@ function Home() {
         {/* Main Content */}
         <div className="flex-1 p-8 bg-white shadow-lg rounded-lg m-3 flex flex-col">
           <div className="flex flex-row">
-            <div className="flex-1">
-              <h1 className="text-3xl font-bold mb-6 text-gray-800">
-                {organization.toUpperCase()}
-              </h1>
-              <div className="space-y-4">
-                <p className="text-lg text-gray-700">
-                  <span className="font-semibold">Number of Classrooms:</span>{" "}
-                  {numberOfClassrooms}
-                </p>
-                <p className="text-lg text-gray-700">
-                  <span className="font-semibold">Number of Teachers:</span>{" "}
-                  {numberOfTeachers}
-                </p>
-                <p className="text-lg text-gray-700">
-                  <span className="font-semibold">Number of Students:</span>{" "}
-                  {numberOfStudents}
-                </p>
-              </div>
-            </div>
+            <OrganizationStats />
             <div className="flex-none w-full md:w-1/3 mt-8 md:mt-0">
               <UserCard user={user} />
             </div>

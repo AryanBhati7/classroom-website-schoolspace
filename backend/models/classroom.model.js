@@ -35,6 +35,9 @@ const classroomSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  organization: {
+    type: String,
+  },
   students: [
     {
       type: mongoose.Schema.Types.ObjectId,

@@ -33,6 +33,7 @@ const createClassroom = asyncHandler(async (req, res) => {
     name,
     teacher: teacherId,
     schedule,
+    organization: req.user.organization,
   });
 
   return res

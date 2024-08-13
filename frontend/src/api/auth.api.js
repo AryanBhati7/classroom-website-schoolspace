@@ -49,6 +49,7 @@ export const login = async (formData) => {
 };
 
 export const logout = async () => {
+  console.log("logout called");
   try {
     const { data } = await API.post("/auth/logout");
     toast.success(data?.message);
@@ -62,7 +63,6 @@ export const logout = async () => {
 export const getCurrentUser = async () => {
   try {
     const { data } = await API.get("/auth/current-user");
-    console.log(data);
     return data?.data;
   } catch (error) {
     return error?.response?.data;

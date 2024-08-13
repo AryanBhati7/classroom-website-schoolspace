@@ -34,7 +34,7 @@ function App() {
   const shouldHideSidebar = hideSidebarPaths.includes(location.pathname);
 
   useEffect(() => {
-    if (res.user) {
+    if (res && res.user) {
       dispatch(setUser(res.user));
     } else {
       dispatch(setUser(null));

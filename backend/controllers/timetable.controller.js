@@ -14,6 +14,12 @@ const createTimetable = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Classroom not found");
   }
 
+  const assignedTeacher = classroomInfo.teacher == teacherId;
+
+  if (!assignedTeacher) {
+    throw new ApiError(403, "You are not assigned to this classroom");
+  }
+
   // Check if the period is within the classroom's schedule
   const isWithinSchedule = classroomInfo.schedule.some(
     (schedule) =>

@@ -18,6 +18,11 @@ import EditClassroom from "./Modals/Classroom/EditClassroom";
 import DeleteClassroom from "./Modals/Classroom/DeleteClassroom";
 import AddClassroom from "./Modals/Classroom/AddClassroom";
 
+//Student
+import EditStudent from "./Modals/Student/EditStudent";
+import DeleteStudent from "./Modals/Student/DeleteStudent";
+import AddStudent from "./Modals/Student/AddStudent";
+
 export {
   LandingPage,
   Logo,
@@ -33,4 +38,7 @@ export {
   EditClassroom,
   DeleteClassroom,
   AddClassroom,
+  EditStudent,
+  DeleteStudent,
+  AddStudent,
 };

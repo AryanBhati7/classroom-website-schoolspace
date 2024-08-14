@@ -139,11 +139,17 @@ const deleteClassroom = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Classroom not found");
   }
 
+  const studentIds = classroom.students;
+
+  await User.deleteMany({ _id: { $in: studentIds } });
+
   await Classroom.findByIdAndDelete(classRoomId);
 
   return res
     .status(200)
-    .json(new ApiResponse(200, {}, "Classroom deleted successfully"));
+    .json(
+      new ApiResponse(200, {}, "Classroom and students deleted successfully")
+    );
 });
 
 export {

@@ -5,7 +5,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 const createStudent = asyncHandler(async (req, res) => {
-  const { name, email, password, classroomId } = req.body;
+  const { name, email, password, classroom } = req.body;
 
   if (!name) {
     throw new ApiError(400, "Please provide a name for the student");
@@ -19,19 +19,20 @@ const createStudent = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Please provide a password for the student");
   }
 
-  if (!classroomId) {
+  if (!classroom) {
     throw new ApiError(400, "Please provide a classroom id for the student");
   }
 
-  const classroom = await Classroom.findById(classroomId);
-
-  if (!classroom) {
-    throw new ApiError(404, "Classroom not found");
-  }
   const existStudent = await User.findOne({ email });
 
   if (existStudent) {
-    throw new ApiError(400, "Student already exists");
+    throw new ApiError(400, "User with this email already Exists");
+  }
+
+  const classroomCheck = await Classroom.findById(classroom);
+
+  if (!classroomCheck) {
+    throw new ApiError(404, "Classroom not found");
   }
 
   const student = new User({
@@ -46,9 +47,9 @@ const createStudent = asyncHandler(async (req, res) => {
 
   const createdStudent = await User.findById(student._id).select("-password");
 
-  classroom.students.push(createdStudent._id);
+  classroomCheck.students.push(createdStudent._id);
 
-  await classroom.save();
+  await classroomCheck.save();
 
   return res
     .status(201)
@@ -73,11 +74,31 @@ const getAllStudents = asyncHandler(async (req, res) => {
       },
     },
     {
+      $lookup: {
+        from: "users", // Collection to join with (assuming teachers are also in the users collection)
+        localField: "classroom.teacher", // Field from the classrooms documents (teacher reference)
+        foreignField: "_id", // Field from the users collection
+        as: "teacher", // Output array field
+      },
+    },
+    {
+      $unwind: {
+        path: "$teacher",
+        preserveNullAndEmptyArrays: true, // Preserve classrooms without teachers
+      },
+    },
+    {
       $project: {
         name: 1,
         email: 1,
         role: 1,
-        classroom: "$classroom.name", // Project the classroom name
+        classroom: 1, // Project the classroom
+        teacher: {
+          // Project the teacher details
+          _id: "$teacher._id",
+          name: "$teacher.name",
+          email: "$teacher.email",
+        },
       },
     },
   ]);
@@ -88,7 +109,7 @@ const getAllStudents = asyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         students,
-        "All students' classrooms fetched successfully"
+        "All students' classrooms and teachers fetched successfully"
       )
     );
 });

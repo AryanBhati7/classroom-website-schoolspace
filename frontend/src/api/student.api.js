@@ -1,14 +1,15 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 import { BASE_URL } from "../constants.js";
+
 const API = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
 });
 
-export const getAllTeachers = async () => {
+export const getAllStudents = async () => {
   try {
-    const { data } = await API.get("/teacher");
+    const { data } = await API.get("/student");
     return data?.data;
   } catch (error) {
     toast.error(error?.response?.data?.error);
@@ -16,9 +17,9 @@ export const getAllTeachers = async () => {
   }
 };
 
-export const addTeacher = async (teacher) => {
+export const addStudent = async (student) => {
   try {
-    const { data } = await API.post("/teacher", teacher);
+    const { data } = await API.post("/student", student);
     toast.success(data?.message);
   } catch (error) {
     toast.error(error?.response?.data?.error);
@@ -26,9 +27,9 @@ export const addTeacher = async (teacher) => {
   }
 };
 
-export const updateTeacher = async (teacher) => {
+export const updateStudent = async (student) => {
   try {
-    const { data } = await API.patch(`/teacher/${teacher._id}`, teacher);
+    const { data } = await API.patch(`/student/${student._id}`, student);
     toast.success(data?.message);
   } catch (error) {
     toast.error(error?.response?.data?.error);
@@ -36,9 +37,9 @@ export const updateTeacher = async (teacher) => {
   }
 };
 
-export const deleteTeacher = async (teacherId) => {
+export const deleteStudent = async (studentId) => {
   try {
-    const { data } = await API.delete(`/teacher/${teacherId}`);
+    const { data } = await API.delete(`/student/${studentId}`);
     toast.success(data?.message);
   } catch (error) {
     toast.error(error?.response?.data?.error);

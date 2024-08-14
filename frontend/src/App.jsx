@@ -11,15 +11,7 @@ import { setUser } from "./features/authSlice";
 import { setTeachers, setClassrooms } from "./features/dataSlice";
 import { useCurrentUser } from "./hooks/auth.hook";
 import { Link } from "react-router-dom";
-import {
-  Home,
-  SignIn,
-  SignUp,
-  Classrooms,
-  Students,
-  Teachers,
-  TimeTable,
-} from "./pages";
+import { Home, SignIn, SignUp, Classrooms, Students, Teachers } from "./pages";
 import {
   LandingPage,
   Sidebar,

@@ -34,7 +34,7 @@ function PrincipalDashboard() {
         <tbody>
           {dashboardData ? (
             dashboardData.map((item, index) => (
-              <tr key={index} className="bg-white border-b">
+              <tr key={index} className="bg-white border-b text-lg">
                 <td className="px-6 py-4">{item.sr}</td>
                 <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                   {item.classroomName}

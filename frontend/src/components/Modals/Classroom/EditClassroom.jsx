@@ -18,7 +18,7 @@ const schema = z.object({
       })
     )
     .min(1, "At least one schedule is required"),
-  // teacher: z.string().min(1, "Teacher is required"),
+  teacher: z.string(),
 });
 
 function EditClassroom({ classroom, onClose }) {
@@ -47,9 +47,14 @@ function EditClassroom({ classroom, onClose }) {
   const { mutateAsync: updateClassroomApi, isPending } = useUpdateClassroom();
 
   const onSubmit = async (data) => {
+    if (data.teacher === "Select a Teacher") {
+      data.teacher = null;
+    }
     const res = await updateClassroomApi({ ...data, _id: classroom._id });
-
-    dispatch(updateClassroom({ _id: res._id, name: res._name }));
+    console.log(res);
+    if (res) {
+      dispatch(updateClassroom({ _id: res._id, name: res._name }));
+    }
     onClose();
   };
 
@@ -93,12 +98,18 @@ function EditClassroom({ classroom, onClose }) {
             {fields.map((item, index) => (
               <div key={item.id} className="mb-2">
                 <div className="flex space-x-2">
-                  <input
-                    type="text"
-                    placeholder="Day"
+                  <select
                     {...register(`schedule.${index}.days`)}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  />
+                  >
+                    <option value="">Select a Day</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                  </select>
                   <input
                     type="time"
                     {...register(`schedule.${index}.startTime`)}
@@ -145,7 +156,7 @@ function EditClassroom({ classroom, onClose }) {
               {...register("teacher")}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             >
-              <option value="">Select a Teacher</option>
+              <option>Select a Teacher</option>
               {teachers.map((teacher) => (
                 <option key={teacher._id} value={teacher._id}>
                   {teacher.name}

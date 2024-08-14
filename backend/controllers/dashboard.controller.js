@@ -62,28 +62,80 @@ const generatePrincipalDashboard = asyncHandler(async (req, res) => {
 
 const getOrganizationStats = asyncHandler(async (req, res) => {
   const organization = req.user?.organization;
+  const role = req.user?.role;
 
-  const [classroomCount, teacherCount, studentCount] = await Promise.all([
-    Classroom.countDocuments({ organization }),
-    User.countDocuments({ organization, role: "TEACHER" }),
-    User.countDocuments({ organization, role: "STUDENT" }),
-  ]);
+  if (!organization || !role) {
+    throw new ApiError(400, "Organization or role not found");
+  }
 
-  const response = {
-    organization,
-    numberOfClassrooms: classroomCount,
-    numberOfTeachers: teacherCount,
-    numberOfStudents: studentCount,
-  };
-  console.log(response);
-  return res
-    .status(200)
-    .json(new ApiResponse(200, response, "Organization Stats"));
+  if (role === "PRINCIPAL") {
+    const [classroomCount, teacherCount, studentCount] = await Promise.all([
+      Classroom.countDocuments({ organization }),
+      User.countDocuments({ organization, role: "TEACHER" }),
+      User.countDocuments({ organization, role: "STUDENT" }),
+    ]);
+
+    const response = {
+      organization,
+      numberOfClassrooms: classroomCount,
+      numberOfTeachers: teacherCount,
+      numberOfStudents: studentCount,
+    };
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, response, "Organization Stats"));
+  } else if (role === "TEACHER") {
+    const classroom = await Classroom.findOne({
+      organization,
+      teacher: req.user._id,
+    }).populate("schedule");
+    if (!classroom) {
+      throw new ApiError(404, "Classroom not found");
+    }
+
+    const response = {
+      organization,
+      className: classroom.name,
+      numberOfStudents: classroom.students.length,
+      classSchedule: classroom.schedule,
+    };
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, response, "Organization Stats"));
+  } else if (role === "STUDENT") {
+    const classroom = await Classroom.findOne({
+      organization,
+      students: req.user._id,
+    }).populate("schedule");
+    if (!classroom) {
+      throw new ApiError(404, "Classroom not found");
+    }
+
+    const response = {
+      organization,
+      className: classroom.name,
+      numberOfStudents: classroom.students.length,
+      classSchedule: classroom.schedule,
+    };
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, response, "Organization Stats"));
+  } else {
+    throw new ApiError(403, "Unauthorized role");
+  }
 });
 
 const getClassroomsAndTeachers = asyncHandler(async (req, res) => {
-  const classrooms = await Classroom.find({}, "_id name");
-  const teachers = await User.find({ role: "TEACHER" }, "_id name");
+  const organization = req.user?.organization;
+
+  const classrooms = await Classroom.find({ organization }, "_id name");
+  const teachers = await User.find(
+    { organization, role: "TEACHER" },
+    "_id name"
+  );
 
   return res
     .status(200)

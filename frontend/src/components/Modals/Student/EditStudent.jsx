@@ -39,6 +39,7 @@ function EditStudent({ student, onClose }) {
   };
 
   const classrooms = useSelector((state) => state.data.classrooms);
+  const user = useSelector((state) => state.auth.user);
 
   if (isPending) {
     return <LoadingSpinner />;
@@ -96,6 +97,7 @@ function EditStudent({ student, onClose }) {
             </label>
             <select
               id="classroom"
+              disabled={user?.role === "TEACHER"}
               {...register("classroom")}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500 hover:border-blue-500"
             >

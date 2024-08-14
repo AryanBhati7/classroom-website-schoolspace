@@ -27,10 +27,10 @@ export const addClassroom = async (classroom) => {
 };
 
 export const updateClassroom = async (classroom) => {
-  console.log(classroom, "update api classroom");
   try {
     const { data } = await API.patch(`/classroom/${classroom._id}`, classroom);
     toast.success(data?.message);
+    return data?.data;
   } catch (error) {
     toast.error(error?.response?.data?.error);
     throw error?.response?.data?.error;

@@ -12,12 +12,16 @@ import { authorizeRole } from "../middleware/authorizeRole.middleware.js";
 const router = Router();
 
 router.use(verifyJWT);
-router.use(authorizeRole(["PRINCIPAL", "TEACHER"]));
 
-router.post("/", createStudent);
-router.get("/", getAllStudents);
+router.post("/", authorizeRole(["PRINCIPAL"]), createStudent);
+
+router.get(
+  "/",
+  authorizeRole(["PRINCIPAL", "TEACHER", "STUDENT"]),
+  getAllStudents
+);
 router.get("/:id", getStudentById);
-router.patch("/:id", updateStudent);
-router.delete("/:id", deleteStudent);
+router.patch("/:id", authorizeRole(["PRINCIPAL", "TEACHER"]), updateStudent);
+router.delete("/:id", authorizeRole(["PRINCIPAL", "TEACHER"]), deleteStudent);
 
 export default router;

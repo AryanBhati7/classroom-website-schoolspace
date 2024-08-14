@@ -69,11 +69,7 @@ function Sidebar() {
         title="Students"
         onClick={() => handleNavigation("/students")}
       />
-      <FaCalendarAlt
-        className={getIconClass("/timetable")}
-        title="Timetable"
-        onClick={() => handleNavigation("/timetable")}
-      />
+
       <div className="flex-grow"></div>
       <FaSignOutAlt
         onClick={handleLogout}

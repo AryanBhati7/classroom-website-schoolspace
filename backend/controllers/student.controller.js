@@ -58,9 +58,25 @@ const createStudent = asyncHandler(async (req, res) => {
 
 const getAllStudents = asyncHandler(async (req, res) => {
   const userOrganization = req.user.organization;
+  const userRole = req.user.role;
+  const userId = req.user._id;
+
+  let matchCondition = { role: "STUDENT", organization: userOrganization };
+
+  if (userRole === "STUDENT") {
+    // If the user is a student, match only their own _id
+    matchCondition = { ...matchCondition, _id: userId };
+  } else if (userRole !== "PRINCIPAL") {
+    // If the user is not a principal, match only students in the same classroom
+    const classroom = await Classroom.findOne({ teacher: userId });
+    if (!classroom) {
+      throw new ApiError(404, "Classroom not found");
+    }
+    matchCondition = { ...matchCondition, _id: { $in: classroom.students } };
+  }
 
   const students = await User.aggregate([
-    { $match: { role: "STUDENT", organization: userOrganization } }, // Match only students in the same organization
+    { $match: matchCondition }, // Match students based on the role
     {
       $lookup: {
         from: "classrooms", // Collection to join with

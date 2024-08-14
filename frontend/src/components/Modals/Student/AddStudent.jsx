@@ -24,7 +24,6 @@ function AddStudent({ onClose }) {
 
   const { mutateAsync: addStudent, isPending } = useAddStudent();
   const onSubmit = async (data) => {
-    console.log(data);
     const res = await addStudent(data);
     if (res) {
       onClose();

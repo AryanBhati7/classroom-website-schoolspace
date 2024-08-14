@@ -97,33 +97,36 @@ const updateClassroom = asyncHandler(async (req, res) => {
     classroom.name = name;
   }
 
+  if (Array.isArray(schedule) && schedule.length > 0) {
+    classroom.schedule = schedule;
+  }
+
   if (teacher) {
-    const teacher = await User.findById(teacher);
-    if (!teacher) {
+    const teacherExists = await User.findById(teacher);
+    if (!teacherExists) {
       throw new ApiError(404, "Teacher not found");
     }
 
-    const teacherAlreadyAssigned = await Classroom.findOne({
-      teacher: teacher._id,
-    });
-
-    if (teacherAlreadyAssigned) {
+    const teacherAlreadyAssigned = await Classroom.findOne({ teacher });
+    if (
+      teacherAlreadyAssigned &&
+      teacherAlreadyAssigned._id.toString() !== classRoomId
+    ) {
       throw new ApiError(
         400,
         "This teacher is already assigned to a different classroom"
       );
     }
 
+    await Classroom.updateMany({ teacher }, { $set: { teacher: null } });
     classroom.teacher = teacher;
-  }
-
-  if (schedule) {
-    classroom.schedule = schedule;
+  } else {
+    classroom.teacher = null;
   }
 
   await classroom.save();
 
-  return res
+  res
     .status(200)
     .json(new ApiResponse(200, classroom, "Classroom updated successfully"));
 });

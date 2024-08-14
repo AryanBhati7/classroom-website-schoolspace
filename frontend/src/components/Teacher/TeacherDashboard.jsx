@@ -4,15 +4,15 @@ import {
   EditStudent,
   AddStudent,
   DeleteStudent,
-} from "../components/index.js";
+} from "../index.js";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { useStudents } from "../hooks/student.hook.js";
+import { useStudents } from "../../hooks/student.hook.js";
 
-function Students() {
+function TeacherDashboard() {
   const { data: students, isPending } = useStudents();
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
 
   const handleEditClick = (student) => {
@@ -40,19 +40,7 @@ function Students() {
   }
 
   return (
-    <div className="flex-1 p-8 bg-white shadow-lg rounded-lg m-3 flex flex-col h-[96%]">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-3xl font-bold">STUDENTS</h1>
-        <button
-          onClick={() => setIsAddModalOpen(true)}
-          className="bg-blue-500 text-white px-4 py-2 rounded flex items-center"
-        >
-          <span className="mr-2">+</span> Add a new Student
-        </button>
-      </div>
-      {isAddModalOpen && (
-        <AddStudent onClose={() => setIsAddModalOpen(false)} />
-      )}
+    <div className="flex-1 p-2 m-2 bg-white rounded-lg flex flex-col h-[96%]">
       <div className="relative overflow-x-auto rounded-lg shadow-lg">
         <table className="w-full text-sm text-center text-gray-500">
           <thead className="text-md uppercase bg-blue-500 text-white">
@@ -66,12 +54,7 @@ function Students() {
               <th scope="col" className="px-6 py-3">
                 Email
               </th>
-              <th scope="col" className="px-6 py-3">
-                Assigned Teacher
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Assigned Class
-              </th>
+
               <th scope="col" className="px-6 py-3">
                 Actions
               </th>
@@ -92,12 +75,7 @@ function Students() {
                     {item.name}
                   </td>
                   <td className="px-6 py-4">{item.email}</td>
-                  <td className="px-6 py-4">
-                    {item.teacher?.name ? item.teacher?.name : "N/A"}
-                  </td>
-                  <td className="px-6 py-4">
-                    {item.classroom ? item.classroom?.name : "N/A"}
-                  </td>
+
                   <td className="px-6 py-4">
                     <div className="flex justify-center items-center gap-2">
                       <button
@@ -133,4 +111,4 @@ function Students() {
   );
 }
 
-export default Students;
+export default TeacherDashboard;

@@ -20,7 +20,7 @@ router.get("/organization-stats", getOrganizationStats);
 
 router.get(
   "/classrooms-teachers",
-  authorizeRole(["PRINCIPAL"]),
+  authorizeRole(["PRINCIPAL", "TEACHER"]),
   getClassroomsAndTeachers
 );
 

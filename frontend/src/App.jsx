@@ -4,11 +4,13 @@ import {
   Routes,
   Route,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "./features/authSlice";
 import { setTeachers, setClassrooms } from "./features/dataSlice";
 import { useCurrentUser } from "./hooks/auth.hook";
+import { Link } from "react-router-dom";
 import {
   Home,
   SignIn,
@@ -29,7 +31,7 @@ import { useTeachersAndClassrooms } from "./hooks/dashboard.hook";
 
 function App() {
   const dispatch = useDispatch();
-  const { data: res, isFetching, error, isFetched } = useCurrentUser();
+  const { data: res, isFetching } = useCurrentUser();
   const location = useLocation();
   const [shouldFetch, setShouldFetch] = useState(false);
 
@@ -41,7 +43,10 @@ function App() {
   useEffect(() => {
     if (res && res.user) {
       dispatch(setUser(res.user));
-      setShouldFetch(true);
+
+      if (res.user.role === "PRINCIPAL" || res.user.role === "TEACHER") {
+        setShouldFetch(true);
+      }
     } else {
       dispatch(setUser(null));
       setShouldFetch(false);
@@ -67,9 +72,11 @@ function App() {
     <div className="App">
       {/* Navbar */}
       <div className="w-full bg-white shadow-lg p-3 flex items-center justify-center">
-        <Logo />
+        <Link to={"/"}>
+          <Logo />
+        </Link>
       </div>
-      <div className="w-full flex">
+      <div className="w-full  min-h-[90vh]  flex">
         {!shouldHideSidebar && <Sidebar />}
         <div className={`content ${shouldHideSidebar ? "w-full" : "flex-1"}`}>
           <Routes>
@@ -99,14 +106,7 @@ function App() {
                 </AuthLayout>
               }
             />
-            <Route
-              path="/timetable"
-              element={
-                <AuthLayout>
-                  <TimeTable />
-                </AuthLayout>
-              }
-            />
+
             <Route
               path="/"
               element={

@@ -2,8 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useLogin } from "../hooks/auth.hook";
 import LoadingSpinner from "./LoadingSpinner";
+import { useDispatch } from "react-redux";
+import { setUser } from "../features/authSlice";
 
 function LandingPage() {
+  const dispatch = useDispatch();
   const { mutateAsync: loginUser, isPending } = useLogin();
 
   const data = {
@@ -15,7 +18,6 @@ function LandingPage() {
 
     if (res) {
       dispatch(setUser(res));
-      navigate("/");
     }
   };
 
@@ -24,8 +26,8 @@ function LandingPage() {
   }
 
   return (
-    <div className="h-screen w-full flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-500">
-      <div className="w-full max-w-4xl text-center flex flex-col items-center bg-white p-10 rounded-lg shadow-lg">
+    <div className="h-screen overflow-y-hidden w-full flex items-center  bg-gradient-to-r from-blue-500 to-purple-500">
+      <div className="w-full mx-auto max-w-4xl text-center flex flex-col items-center bg-white p-3 rounded-lg shadow-lg">
         <h1 className="lora-font text-6xl text-blue font-bold mt-10">
           Welcome to <span className="text-blue-500">School</span>Space!
         </h1>
@@ -34,7 +36,7 @@ function LandingPage() {
         </h3>
         <h5 className="text-xl mt-7 sedan-regular text-gray-600">
           SchoolSpace revolutionizes school management using comprehensive tools
-          for class organization, student administration, and data analysis.
+          for class organization and student administration.
         </h5>
         <h5 className="text-xl mt-3 sedan-regular text-gray-600">
           Say goodbye to paperwork and hello to streamlined processes that save
@@ -52,7 +54,7 @@ function LandingPage() {
           Sign In
         </Link>
 
-        <div className="text-lg flex gap-2 mt-5 text-gray-700">
+        <div className="text-lg flex  mt-5 text-gray-700">
           <p>Don't have an account?</p>
           <Link
             to="/sign-up"
@@ -64,7 +66,7 @@ function LandingPage() {
 
         <button
           onClick={handleDemoTour}
-          className="text-white rounded-lg p-4 text-md font-semibold bg-green-700 hover:bg-green-500 disabled:opacity-80 mt-8 w-2/6"
+          className="text-white rounded-lg p-4 text-md font-semibold bg-green-700 hover:bg-green-500 disabled:opacity-80 mt-2 w-2/6"
         >
           Click here for a demo tour
         </button>

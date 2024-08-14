@@ -12,7 +12,6 @@ export const getPrincipalDashboard = async () => {
     const { data } = await API.get("/dashboard/principal");
     return data?.data;
   } catch (error) {
-    toast.error(error?.response?.data?.error);
     throw error?.response?.data?.error;
   }
 };
@@ -32,7 +31,6 @@ export const getTeachersAndClassrooms = async () => {
     const { data } = await API.get("/dashboard/classrooms-teachers");
     return data?.data;
   } catch (error) {
-    toast.error(error?.response?.data?.error);
     throw error?.response?.data?.error;
   }
 };

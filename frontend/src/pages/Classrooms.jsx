@@ -5,6 +5,7 @@ import {
   EditClassroom,
   AddClassroom,
   DeleteClassroom,
+  Schedule,
 } from "../components/index.js";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useClassrooms } from "../hooks/classroom.hook.js";
@@ -99,15 +100,7 @@ function Classrooms() {
                     {classroom.schedule && classroom.schedule.length > 0 ? (
                       <ul className="space-y-2">
                         {classroom.schedule.map((item, idx) => (
-                          <li
-                            key={idx}
-                            className="flex items-center justify-between bg-blue-100 text-blue-900 rounded-lg p-2 shadow-md"
-                          >
-                            <span className="font-semibold">{item.days}</span>
-                            <span className="text-md">
-                              {item.startTime} - {item.endTime}
-                            </span>
-                          </li>
+                          <Schedule key={idx} item={item} />
                         ))}
                       </ul>
                     ) : (

@@ -22,11 +22,12 @@ export const useOrganizationStats = () => {
   });
 };
 
-export const useTeachersAndClassrooms = () => {
+export const useTeachersAndClassrooms = (shouldFetch) => {
   return useQuery({
     queryKey: ["teachersAndClassrooms"],
     queryFn: () => getTeachersAndClassrooms(),
     staleTime: 1000 * 60 * 5,
     retry: 1,
+    enabled: shouldFetch,
   });
 };

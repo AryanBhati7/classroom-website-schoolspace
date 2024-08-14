@@ -6,6 +6,9 @@ import Sidebar from "./Sidebar";
 import AuthLayout from "./AuthLayout";
 import PrincipalDashboard from "./Principal/PrincipalDashboard";
 import OrganizationStats from "./OrganizationStats";
+import TeacherDashboard from "./Teacher/TeacherDashboard";
+import StudentDashboard from "./Student/StudentDashboard";
+import Schedule from "./Schedule";
 
 //Modals
 //Teacher
@@ -41,4 +44,7 @@ export {
   EditStudent,
   DeleteStudent,
   AddStudent,
+  TeacherDashboard,
+  StudentDashboard,
+  Schedule,
 };

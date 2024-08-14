@@ -57,8 +57,10 @@ const createStudent = asyncHandler(async (req, res) => {
 });
 
 const getAllStudents = asyncHandler(async (req, res) => {
+  const userOrganization = req.user.organization;
+
   const students = await User.aggregate([
-    { $match: { role: "STUDENT" } }, // Match only students
+    { $match: { role: "STUDENT", organization: userOrganization } }, // Match only students in the same organization
     {
       $lookup: {
         from: "classrooms", // Collection to join with
@@ -113,7 +115,6 @@ const getAllStudents = asyncHandler(async (req, res) => {
       )
     );
 });
-
 const updateStudent = asyncHandler(async (req, res) => {
   const studentId = req.params.id;
   const { name, email, password } = req.body;
@@ -126,6 +127,14 @@ const updateStudent = asyncHandler(async (req, res) => {
 
   if (!student) {
     throw new ApiError(404, "Student not found");
+  }
+
+  if (student.role !== "STUDENT") {
+    throw new ApiError(400, "User is not a student");
+  }
+
+  if (student.organization.toString() !== req.user.organization.toString()) {
+    throw new ApiError(400, "Student does not belong to your organization");
   }
 
   if (name) {
@@ -160,6 +169,14 @@ const deleteStudent = asyncHandler(async (req, res) => {
 
   if (!student) {
     throw new ApiError(404, "Student not found");
+  }
+
+  if (student.role !== "STUDENT") {
+    throw new ApiError(400, "User is not a student");
+  }
+
+  if (student.organization.toString() !== req.user.organization.toString()) {
+    throw new ApiError(400, "Student does not belong to your organization");
   }
   // Remove the student from the classroom's students array
   const classroom = await Classroom.findOne({ students: studentId });

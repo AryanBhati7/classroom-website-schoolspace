@@ -18,7 +18,6 @@ export const useOrganizationStats = () => {
   return useQuery({
     queryKey: ["organizationStats"],
     queryFn: () => getOrganizationStats(),
-    staleTime: 1000 * 60 * 5,
     retry: 1,
   });
 };

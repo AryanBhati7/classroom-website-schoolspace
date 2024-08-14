@@ -84,6 +84,14 @@ const updateTeacher = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Teacher not found");
   }
 
+  if (teacher.role !== "TEACHER") {
+    throw new ApiError(400, "User is not a teacher");
+  }
+
+  if (teacher.organization.toString() !== req.user.organization.toString()) {
+    throw new ApiError(400, "Teacher does not belong to your organization");
+  }
+
   if (name) {
     teacher.name = name;
   }
@@ -132,6 +140,16 @@ const deleteTeacher = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Teacher not found");
   }
 
+  if (teacherExists.role !== "TEACHER") {
+    throw new ApiError(400, "User is not a teacher");
+  }
+
+  if (
+    teacherExists.organization.toString() !== req.user.organization.toString()
+  ) {
+    throw new ApiError(400, "Teacher does not belong to your organization");
+  }
+
   await Classroom.findOneAndUpdate({ teacher: teacherId }, { teacher: null });
 
   await User.findByIdAndDelete(teacherId);
@@ -142,8 +160,10 @@ const deleteTeacher = asyncHandler(async (req, res) => {
 });
 
 const getTeachers = asyncHandler(async (req, res) => {
+  const userOrganization = req.user.organization;
+
   const teachers = await User.aggregate([
-    { $match: { role: "TEACHER" } }, // Match only teachers
+    { $match: { role: "TEACHER", organization: userOrganization } }, // Match only teachers in the same organization
     {
       $lookup: {
         from: "classrooms", // Collection to join with

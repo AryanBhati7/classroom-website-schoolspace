@@ -75,7 +75,7 @@ const getOrganizationStats = asyncHandler(async (req, res) => {
     numberOfTeachers: teacherCount,
     numberOfStudents: studentCount,
   };
-
+  console.log(response);
   return res
     .status(200)
     .json(new ApiResponse(200, response, "Organization Stats"));

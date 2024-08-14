@@ -69,7 +69,9 @@ const getClassroomById = asyncHandler(async (req, res) => {
 });
 
 const getAllClassrooms = asyncHandler(async (req, res) => {
-  const classrooms = await Classroom.find()
+  const userOrganization = req.user.organization;
+
+  const classrooms = await Classroom.find({ organization: userOrganization })
     .populate("teacher")
     .populate("students");
 

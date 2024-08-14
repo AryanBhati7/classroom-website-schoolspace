@@ -39,7 +39,6 @@ function Students() {
   if (isPending) {
     return <LoadingSpinner />;
   }
-  console.log(students);
 
   return (
     <div className="flex-1 p-8 bg-white shadow-lg rounded-lg m-3 flex flex-col h-[96%]">
